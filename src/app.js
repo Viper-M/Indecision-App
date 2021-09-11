@@ -1,58 +1,108 @@
-class Count extends React.Component {
-    constructor(props){
-        super(props)
-        this.addone = this.addone.bind(this)
-        this.minusone = this.minusone.bind(this)
-        this.reset = this.reset.bind(this)
-        this.state = {
-            count: 0
-        }
-    }
-    addone(){
-        this.setState((state)=>{
-            return {
-                count: state.count + 1 
-            }
-        })
-    }
-    minusone(){
-        this.setState((state)=>{
-            return {
-                count: state.count - 1 
-            }
-        })
-    }
-    reset(){
-        this.setState((state)=>{
-            return {
-                count: 0 
-            }
-        })
-    }
-    componentDidMount(){
-        var string = localStorage.getItem('count')
-        var count = parseInt(string, 10);
-        console.log(count)
+import React from "react"
+import ReactDOM from "react-dom"
+import Action from "./components/action"
 
-        if(!isNaN(count)){
-            this.setState(()=>({count}));
+class Indecision extends React.Component {
+    constructor(props) {
+        super(props)
+        this.removeall = this.removeall.bind(this)
+        this.deleteone = this.deleteone.bind(this)
+        this.whatdo = this.whatdo.bind(this)
+        this.addoption = this.addoption.bind(this)
+        this.state = {
+            options: ['one']
         }
     }
-    componentDidUpdate(props,state){
-        if(state.count !== this.state.count){
-            localStorage.setItem('count', this.state.count )
-        }
+
+    removeall() {
+        this.setState(() => {
+            return {
+                options: []
+            }
+        })
     }
-    render(){
+
+    deleteone(optiontoremove) {
+        this.setState((state) => {
+            return {
+                options: state.options.filter((option)=>{
+                    return optiontoremove !== option
+                })
+            }
+        })
+    }
+
+    whatdo() {
+        var number = Math.floor(Math.random() * this.state.options.length)
+        alert(this.state.options[number])
+    }
+
+    addoption(option) {
+        this.setState((state) => {
+            return {
+                options: state.options.concat(option)
+            }
+        })
+    }
+
+    render() {
         return (
             <div>
-                <h1>Count: {this.state.count}</h1>
-                <button onClick={this.addone}>+1</button>
-                <button onClick={this.minusone}>-1</button>
-                <button onClick={this.reset}>Reset</button>
+                <Header title="Indecision App" />
+                <Action hasoption={this.state.options.length > 0} options={this.state.options} removeall={this.removeall} whatdo={this.whatdo} />
+                <Options options={this.state.options} deleteone={this.deleteone}/>
+                <Addoption addoption={this.addoption} />
             </div>
         );
     }
 }
 
-ReactDOM.render(<Count/>,approot)
+class Header extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1>{this.props.title}</h1>
+            </div>
+        );
+    }
+}
+
+class Options extends React.Component {
+    render() {
+        return (
+            <div>
+                {
+                    this.props.options.map((option) => {
+                        return <div> {option} <button onClick = {(e) => {
+                            this.props.deleteone(option)
+                        }}> Remove</button> </div>
+                    })
+                }
+            </div>
+        );
+    }
+}
+ 
+
+class Addoption extends React.Component {
+    constructor(props) {
+        super(props)
+        this.addoption = this.addoption.bind(this)
+    }
+    addoption() {
+        var option = document.getElementById('input').value
+
+        this.props.addoption(option)
+        document.getElementById('input').value = ''
+    }
+    render() {
+        return (
+            <div>
+                <input id="input" />
+                <button onClick={this.addoption}>Add</button>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<Indecision />, document.getElementById('approot'));

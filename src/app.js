@@ -1,6 +1,4 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import Action from "./components/action"
+import React from 'react'
 
 class Indecision extends React.Component {
     constructor(props) {
@@ -56,6 +54,24 @@ class Indecision extends React.Component {
         );
     }
 }
+
+
+class Action extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        return (
+            <div>
+                <button disabled={!this.props.hasoption} onClick={this.props.whatdo}>What shoud I do?</button>
+                <br />
+                <br />
+                <button onClick={this.props.removeall}>Reset All</button>
+            </div>
+        );
+    }
+}
+
 
 class Header extends React.Component {
     render() {

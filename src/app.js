@@ -1,4 +1,9 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
+import Action from './components/action'
+import Header from './components/header'
+import Addoption from './components/addoption'
+import Options from './components/options'
 
 class Indecision extends React.Component {
     constructor(props) {
@@ -50,72 +55,6 @@ class Indecision extends React.Component {
                 <Action hasoption={this.state.options.length > 0} options={this.state.options} removeall={this.removeall} whatdo={this.whatdo} />
                 <Options options={this.state.options} deleteone={this.deleteone}/>
                 <Addoption addoption={this.addoption} />
-            </div>
-        );
-    }
-}
-
-
-class Action extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
-        return (
-            <div>
-                <button disabled={!this.props.hasoption} onClick={this.props.whatdo}>What shoud I do?</button>
-                <br />
-                <br />
-                <button onClick={this.props.removeall}>Reset All</button>
-            </div>
-        );
-    }
-}
-
-
-class Header extends React.Component {
-    render() {
-        return (
-            <div>
-                <h1>{this.props.title}</h1>
-            </div>
-        );
-    }
-}
-
-class Options extends React.Component {
-    render() {
-        return (
-            <div>
-                {
-                    this.props.options.map((option) => {
-                        return <div> {option} <button onClick = {(e) => {
-                            this.props.deleteone(option)
-                        }}> Remove</button> </div>
-                    })
-                }
-            </div>
-        );
-    }
-}
- 
-
-class Addoption extends React.Component {
-    constructor(props) {
-        super(props)
-        this.addoption = this.addoption.bind(this)
-    }
-    addoption() {
-        var option = document.getElementById('input').value
-
-        this.props.addoption(option)
-        document.getElementById('input').value = ''
-    }
-    render() {
-        return (
-            <div>
-                <input id="input" />
-                <button onClick={this.addoption}>Add</button>
             </div>
         );
     }
